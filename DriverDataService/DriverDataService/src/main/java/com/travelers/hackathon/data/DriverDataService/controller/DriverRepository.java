@@ -12,5 +12,8 @@ import com.travelers.hackathon.data.DriverDataService.model.Driver;
 @RepositoryRestResource(collectionResourceRel = "drivers", path = "drivers")
 public interface DriverRepository extends PagingAndSortingRepository<Driver, Long> {
 	@RestResource(path = "by-idCustomers")
-	List<Driver> findByDriverId(@Param("driverId") int driverId);
+	List<Driver> findByDriverId(@Param("driverId") Long driverId);
+
+	@RestResource(path = "by-policy")
+	List<Driver> findByPolicy(@Param("policy") String policy); 
 }

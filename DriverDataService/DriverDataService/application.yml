@@ -1,2 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/MeatComputer
+    username: appuser
+    password: InnJam17
+# Keep the connection alive if idle for a long time (needed in production)
+    dbcp2:
+      test-while-idle: true
+      validation-query: SELECT 1
+
+# Show or not log for each sql query
+  jpa:
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+
 server:
   port: 9081

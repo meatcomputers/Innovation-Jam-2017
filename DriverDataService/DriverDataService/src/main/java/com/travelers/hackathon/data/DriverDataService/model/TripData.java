@@ -23,7 +23,7 @@ public class TripData {
 	
 	private Integer vehicleId; 
 
-	@JsonFormat(pattern="MM/dd/yyyy hh:mm:ss")
+	@JsonFormat(pattern="MM/dd/yyyy kk:mm:ss")
 	private Date timeStamp; 
 	
 	private Float speed;

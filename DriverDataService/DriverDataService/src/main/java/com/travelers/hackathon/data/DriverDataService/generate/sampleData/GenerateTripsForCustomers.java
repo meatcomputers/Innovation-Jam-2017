@@ -120,7 +120,7 @@ public class GenerateTripsForCustomers {
 			tripData.setDriverId(profile.getDriverId());
 			tripData.setVehicleId(1);
 			tripData.setSpeed(tripPoint);
-			tripData.setTimeStamp(currentTime);
+//			tripData.setTimeStamp(currentTime);
 			tripData.setDriverless(driverless);
 			tripDataRepository.save(tripData);
 		}

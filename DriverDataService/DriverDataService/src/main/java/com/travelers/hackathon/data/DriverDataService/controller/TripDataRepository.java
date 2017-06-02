@@ -18,11 +18,11 @@ public interface TripDataRepository extends PagingAndSortingRepository<TripData,
 	@RestResource(path = "by-driverIdAndTimestampBetween")
 	List<TripData> findByDriverIdAndTimeStampBetween(
 			@Param("driverId") Integer driverId, 
-			@Param("startTime") @JsonFormat(pattern="MM/dd/yyyy hh:mm:ss") Date startTime, 
-			@Param("stopTime") @JsonFormat(pattern="MM/dd/yyyy hh:mm:ss") Date stopTime);
+			@Param("startTime") @JsonFormat(pattern="MM/dd/yyyy kk:mm:ss") Date startTime, 
+			@Param("stopTime") @JsonFormat(pattern="MM/dd/yyyy kk:mm:ss") Date stopTime);
 	
 	@RestResource(path = "by-driverIdAndTimestampAfter")
 	List<TripData> findByDriverIdAndTimeStampAfter(
 			@Param("driverId") Integer driverId, 
-			@Param("timeStamp") @JsonFormat(pattern="MM/dd/yyyy hh:mm:ss") Date timeStamp);
+			@Param("timeStamp") @JsonFormat(pattern="MM/dd/yyyy kk:mm:ss") Date timeStamp);
 }

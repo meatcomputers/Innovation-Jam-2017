@@ -25,4 +25,8 @@ public interface TripDataRepository extends PagingAndSortingRepository<TripData,
 	List<TripData> findByDriverIdAndTimeStampAfter(
 			@Param("driverId") Integer driverId, 
 			@Param("timeStamp") @JsonFormat(pattern="MM/dd/yyyy kk:mm:ss") Date timeStamp);
+	
+	@RestResource(path = "by-driverIdLastHour") 
+	List<TripData> findTop240ByDriverIdOrderByTimeStampDesc(
+			@Param("driverId") Integer driverId); 
 }

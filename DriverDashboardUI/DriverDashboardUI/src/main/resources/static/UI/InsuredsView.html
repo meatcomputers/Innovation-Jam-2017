@@ -5,15 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Insured's Views</title>
+    <title>My Policy</title>
 
     <!-- Bootstrap -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
-    <link href="../insuredsView.css" rel="stylesheet">
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Play:700,400' type='text/css'>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,26 +25,18 @@
       <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Insured's View</a>
+      <a class="navbar-brand" href="#">My Policy</a>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-          </li>
+            
           <li class="nav-item">
-            <a class="nav-link" href="#">Insured's View</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="actuary.html">Actuary View</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="program.html">Program</a>
+            <a class="nav-link" href="ClaimView.html">Claim</a>
           </li>
         </ul>
         <form class="form-inline mt-2 mt-md-0">
-          <input id="policySearchBox" class="form-control mr-sm-2" type="text" placeholder="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" onclick="searchForPolicy(); return false; " >Search</button>
+          <input class="form-control mr-sm-2" type="text" placeholder="Policy">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
       </div>
     </nav>
@@ -68,22 +58,14 @@
               <a class="nav-link" href="#">Export</a>
             </li>
           </ul>
+
+          
         </nav>
 
         <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-          <h1>Dashboard</h1>
-          <div class="row">
-          	<label>Policy #</label><input id="insuredPOlicyNumber" type="text"></input>
-          </div>
-          <div class="row">
-          	<label>Driver Name</label><input id="driverName" type="text"></input>
-          </div>
-          <div class="row">
-          	<label>Vehicle Make, Model</label><input id="vehicleMake" type="text"></input>
-          </div>
-          <div class="row">
-          	<label>Safety Level Score</label><input id="safetyLevel" type="text"></input>
-          </div>
+
+          <img src="../assets/img/travelers-logo-small.png">
+          <h1>My Autonomous Vehicle Dashboard</h1>
 
 
           <section class="row text-center placeholders">

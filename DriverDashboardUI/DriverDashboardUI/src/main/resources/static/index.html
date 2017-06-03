@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<svg width="960" height="500"></svg>
+<style>
+            .legend {
+	            padding: 5px;
+	            font: 10px sans-serif;
+	            background: yellow;
+	            box-shadow: 2px 2px 1px #888;
+            }
+
+            .title {
+            	font: 36px sans-serif;font-weight: bold;
+            }
+            
+            .legendText {
+            	font: 18px sans-serif;font-weight: bold;
+            }
+</style>
+<svg width="960" height="600"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
 var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 50},
+    margin = {top: 55, right: 20, bottom: 200, left: 50},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -20,14 +36,19 @@ var y = d3.scaleLinear()
 var line = d3.line()
     .x(function(d) { return x(d.timeStamp); })
     .y(function(d) { return y(d.speed); });
+    
+var area = d3.area()
+    .x(function(d) { return x(d.timeStamp); })
+    .y0(height)
+    .y1(function(d) { return y(d.speed); });
 
 d3.json('http://localhost:9090/TripData/tripDatas', function(error, data) {
   if (error) throw error;
-  //alert(JSON.stringify(data));
   data._embedded.tripDatas.forEach(function(d) {
     d.timeStamp = parseTime(d.timeStamp);
     d.speed = +d.speed;
-    
+    d.x = d.timeStamp;
+    d.y = d.speed;
     return d;
   });
 
@@ -56,6 +77,36 @@ d3.json('http://localhost:9090/TripData/tripDatas', function(error, data) {
       .text("Speed (mph)");
 
   g.append("path")
+      .datum(data._embedded.tripDatas.slice(0))
+      .attr("fill", "#58D68D")
+      .attr("stroke-width", 0)
+      .attr("d", area);
+      
+    g.append("path")
+      .datum(data._embedded.tripDatas.slice(4))
+      .attr("fill", "green")
+      .attr("stroke-width", 0)
+      .attr("d", area);
+      
+    g.append("path")
+      .datum(data._embedded.tripDatas.slice(8))
+      .attr("fill", "steelblue")
+      .attr("stroke-width", 0)
+      .attr("d", area);
+      
+    g.append("path")
+      .datum(data._embedded.tripDatas.slice(10))
+      .attr("fill", "#85C1E9")
+      .attr("stroke-width", 0)
+      .attr("d", area);
+      
+    g.append("path")
+      .datum(data._embedded.tripDatas.slice(12))
+      .attr("fill", "green")
+      .attr("stroke-width", 0)
+      .attr("d", area);
+
+  g.append("path")
       .datum(data._embedded.tripDatas)
       .attr("fill", "none")
       .attr("stroke", "steelblue")
@@ -63,6 +114,53 @@ d3.json('http://localhost:9090/TripData/tripDatas', function(error, data) {
       .attr("stroke-linecap", "round")
       .attr("stroke-width", 1.5)
       .attr("d", line);
+  
+  	// Add title	  
+	svg.append("svg:text")
+		 .attr("class", "title")
+	   .attr("x", (svg.attr("width") - margin.left - margin.right)/2)
+	   .attr("y", 50)
+	   .text("Driving Data");
+	   
+ var w = 125;
+ 
+ var color_hash = {  0 : ["rideshare automated", "#58D68D"],
+    1 : ["personal automated", "green"],
+    2 : ["rideshare manual", "#85C1E9"],
+    3 : ["personal manual", "steelblue"]
+  }       
+  
+	// add legend   
+	var legend = svg.append("g")
+	  .attr("class", "legend")
+	  .attr("x", w - 65)
+	  .attr("y", 25)
+	  .attr("height", 100)
+	  .attr("width", 100);
+
+	legend.selectAll('g').data(data._embedded.tripDatas.slice( 0,4))
+      .enter()
+      .append('g')
+      .each(function(d, i) {
+        var g = d3.select(this);
+        g.append("rect")
+          .attr("x", w - 65)
+          .attr("y", 450 + i*25)
+          .attr("width", 10)
+          .attr("height", 10)
+          .style("fill", color_hash[String(i)][1]);
+        
+        g.append("text")
+          .attr("class", "legendText")
+          .attr("x", w - 50)
+          .attr("y", 450 + i * 25 + 8)
+          .attr("height",30)
+          .attr("width",100)
+          .style("fill", color_hash[String(i)][1])
+          .text(color_hash[String(i)][0]);
+
+      });
+
 });
 
 </script>

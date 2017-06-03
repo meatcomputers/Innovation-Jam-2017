@@ -149,3 +149,150 @@ var createPieChart = function(
             .text(function(d, i) { return data[i].label; });        //get the label from our original data array
         
 };
+
+var displayVelocityChartForUser = function(userId) {
+
+	var svg = d3.select("svg#userChart"),
+	    margin = {top: 55, right: 20, bottom: 200, left: 50},
+	    width = +svg.attr("width") - margin.left - margin.right,
+	    height = +svg.attr("height") - margin.top - margin.bottom,
+	    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	var parseTime = d3.timeParse("%m/%d/%Y %H:%M:%S");
+
+	var x = d3.scaleTime()
+	    .rangeRound([0, width]);
+
+	var y = d3.scaleLinear()
+	    .rangeRound([height, 0]);
+
+	var line = d3.line()
+	    .x(function(d) { return x(d.timeStamp); })
+	    .y(function(d) { return y(d.speed); });
+	    
+	var area = d3.area()
+	    .x(function(d) { return x(d.timeStamp); })
+	    .y0(height)
+	    .y1(function(d) { return y(d.speed); });
+
+	d3.json('http://localhost:9090/TripData//tripDatas/search/by-driverIdLastHour?driverId=' + userId, function(error, data) {
+	  if (error) throw error;
+	  data._embedded.tripDatas.forEach(function(d) {
+	    d.timeStamp = parseTime(d.timeStamp);
+	    d.speed = +d.speed;
+	    d.x = d.timeStamp;
+	    d.y = d.speed;
+	    return d;
+	  });
+
+	  x.domain(d3.extent(data._embedded.tripDatas, function(d) { return d.timeStamp; }));
+	  y.domain(d3.extent(data._embedded.tripDatas, function(d) { return d.speed; }));
+
+	  g.append("g")
+	      .attr("transform", "translate(0," + height + ")")
+	      .call(d3.axisBottom(x))
+	      .append("text")
+	        .attr("fill", "#000")
+	        .attr("x", 21)
+	        .attr("y", 21)
+	        .attr("dy", "0.71em")
+	        .attr("text-anchor", "end")
+	        .text("Time");
+
+	  g.append("g")
+	      .call(d3.axisLeft(y))
+	    .append("text")
+	      .attr("fill", "#000")
+	      .attr("transform", "rotate(-90)")
+	      .attr("y", -35)
+	      .attr("dy", "0.71em")
+	      .attr("text-anchor", "end")
+	      .text("Speed (mph)");
+
+	  g.append("path")
+	      .datum(data._embedded.tripDatas.slice(0))
+	      .attr("fill", "#58D68D")
+	      .attr("stroke-width", 0)
+	      .attr("d", area);
+	      
+	    g.append("path")
+	      .datum(data._embedded.tripDatas.slice(4))
+	      .attr("fill", "green")
+	      .attr("stroke-width", 0)
+	      .attr("d", area);
+	      
+	    g.append("path")
+	      .datum(data._embedded.tripDatas.slice(8))
+	      .attr("fill", "steelblue")
+	      .attr("stroke-width", 0)
+	      .attr("d", area);
+	      
+	    g.append("path")
+	      .datum(data._embedded.tripDatas.slice(10))
+	      .attr("fill", "#85C1E9")
+	      .attr("stroke-width", 0)
+	      .attr("d", area);
+	      
+	    g.append("path")
+	      .datum(data._embedded.tripDatas.slice(12))
+	      .attr("fill", "green")
+	      .attr("stroke-width", 0)
+	      .attr("d", area);
+
+	  g.append("path")
+	      .datum(data._embedded.tripDatas)
+	      .attr("fill", "none")
+	      .attr("stroke", "steelblue")
+	      .attr("stroke-linejoin", "round")
+	      .attr("stroke-linecap", "round")
+	      .attr("stroke-width", 1.5)
+	      .attr("d", line);
+	  
+	  	// Add title	  
+		svg.append("svg:text")
+			 .attr("class", "title")
+		   .attr("x", (svg.attr("width") - margin.left - margin.right)/2)
+		   .attr("y", 50)
+		   .text("Driving Data");
+		   
+	 var w = 125;
+	 
+	 var color_hash = {  0 : ["rideshare automated", "#58D68D"],
+	    1 : ["personal automated", "green"],
+	    2 : ["rideshare manual", "#85C1E9"],
+	    3 : ["personal manual", "steelblue"]
+	  }       
+	  
+		// add legend   
+		var legend = svg.append("g")
+		  .attr("class", "legend")
+		  .attr("x", w - 65)
+		  .attr("y", 25)
+		  .attr("height", 100)
+		  .attr("width", 100);
+
+		legend.selectAll('g').data(data._embedded.tripDatas.slice( 0,4))
+	      .enter()
+	      .append('g')
+	      .each(function(d, i) {
+	        var g = d3.select(this);
+	        g.append("rect")
+	          .attr("x", w - 65)
+	          .attr("y", 450 + i*25)
+	          .attr("width", 10)
+	          .attr("height", 10)
+	          .style("fill", color_hash[String(i)][1]);
+	        
+	        g.append("text")
+	          .attr("class", "legendText")
+	          .attr("x", w - 50)
+	          .attr("y", 450 + i * 25 + 8)
+	          .attr("height",30)
+	          .attr("width",100)
+	          .style("fill", color_hash[String(i)][1])
+	          .text(color_hash[String(i)][0]);
+
+	      });
+
+	});
+};

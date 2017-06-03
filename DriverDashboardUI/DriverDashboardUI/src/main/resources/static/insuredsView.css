@@ -1,5 +1,4 @@
 /* css formats for the gauge */
-
 #speedometerContainer {
 	height: 300px;
 	width: 340px;
@@ -48,6 +47,24 @@
 
 /*PIE Chart stuff: */
 .slice text {
-    font-size: 16pt;
-    font-family: Arial;
-}   
+	font-size: 16pt;
+	font-family: Arial;
+}
+
+/*Velocity Chart*/
+.legend {
+	padding: 5px;
+	font: 10px sans-serif;
+	background: yellow;
+	box-shadow: 2px 2px 1px #888;
+}
+
+.title {
+	font: 36px sans-serif;
+	font-weight: bold;
+}
+
+.legendText {
+	font: 18px sans-serif;
+	font-weight: bold;
+}

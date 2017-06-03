@@ -96,7 +96,7 @@ d3.json('http://localhost:9090/TripData/tripDatas', function(error, data) {
       
     g.append("path")
       .datum(data._embedded.tripDatas.slice(10))
-      .attr("fill", "orange")
+      .attr("fill", "#85C1E9")
       .attr("stroke-width", 0)
       .attr("d", area);
       
@@ -126,7 +126,7 @@ d3.json('http://localhost:9090/TripData/tripDatas', function(error, data) {
  
  var color_hash = {  0 : ["rideshare automated", "#58D68D"],
     1 : ["personal automated", "green"],
-    2 : ["rideshare manual", "orange"],
+    2 : ["rideshare manual", "#85C1E9"],
     3 : ["personal manual", "steelblue"]
   }       
   

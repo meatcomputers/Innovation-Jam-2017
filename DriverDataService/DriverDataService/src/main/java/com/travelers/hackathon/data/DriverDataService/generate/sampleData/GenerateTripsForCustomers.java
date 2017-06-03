@@ -45,6 +45,7 @@ public class GenerateTripsForCustomers {
 		weekdayCommute.setDecelerationMetersPerSecondSecond(-2.8f);
 		weekdayCommute.setSampleTimeSeconds(SAMPLE_TIME_SECONDS);
 		weekdayCommute.setTotalSeconds(25 * 60);
+		weekdayCommute.setRideShare(false);
 
 		TripProfile saturdayDrive = new TripProfile(driverProfile);
 		saturdayDrive.setStartTime(tripDate.getTime());
@@ -55,6 +56,7 @@ public class GenerateTripsForCustomers {
 		saturdayDrive.setDecelerationMetersPerSecondSecond(-2.8f);
 		saturdayDrive.setSampleTimeSeconds(SAMPLE_TIME_SECONDS);
 		saturdayDrive.setTotalSeconds(5 * 60);
+		saturdayDrive.setRideShare(true);
 
 		FileWriter fw = new FileWriter("Data/DriverData_01.csv");
 //		FileWriter fw = new FileWriter("Data/DriverData_01.json");
@@ -107,6 +109,7 @@ public class GenerateTripsForCustomers {
 		weekdayCommute.setDecelerationMetersPerSecondSecond(-2.71f);
 		weekdayCommute.setSampleTimeSeconds(SAMPLE_TIME_SECONDS);
 		weekdayCommute.setTotalSeconds(33 * 60);
+		weekdayCommute.setRideShare(true);
 
 		TripProfile saturdayDrive = new TripProfile(driverProfile);
 		saturdayDrive.setStartTime(tripDate.getTime());
@@ -117,11 +120,12 @@ public class GenerateTripsForCustomers {
 		saturdayDrive.setDecelerationMetersPerSecondSecond(-1.8f);
 		saturdayDrive.setSampleTimeSeconds(SAMPLE_TIME_SECONDS);
 		saturdayDrive.setTotalSeconds(5 * 60);
+		weekdayCommute.setRideShare(true);
 
-		FileWriter fw = new FileWriter("Data/DriverData_02.csv");
-//		FileWriter fw = new FileWriter("Data/DriverData_01.json");
+//		FileWriter fw = new FileWriter("Data/DriverData_02.csv");
+		FileWriter fw = new FileWriter("Data/DriverData_01.csv");
 		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write("driverID, timestamp, velocity, driverless\n");
+		bw.write("driverID, timestamp, velocity, driverless, rideShare\n");
 //		bw.write("data: {[\n");
 		
 		for (int j = 0; j < 4; j++) {
@@ -129,14 +133,17 @@ public class GenerateTripsForCustomers {
 				tripDate.set(Calendar.HOUR, 8);
 				tripDate.set(Calendar.MINUTE, 30);
 				weekdayCommute.setStartTime(tripDate.getTime());
+				weekdayCommute.setRideShare(true);
 				generateTripData(driverProfile, weekdayCommute, bw, .5f);
 
 				tripDate.add(Calendar.HOUR, 2);
 				weekdayCommute.setStartTime(tripDate.getTime());
+				weekdayCommute.setRideShare(false);
 				generateTripData(driverProfile, weekdayCommute, bw, .5f);
 
 				tripDate.add(Calendar.HOUR, 3);
 				weekdayCommute.setStartTime(tripDate.getTime());
+				weekdayCommute.setRideShare(true);
 				generateTripData(driverProfile, weekdayCommute, bw, .5f);
 				
 				tripDate.add(Calendar.DATE, 1);
@@ -175,12 +182,14 @@ public class GenerateTripsForCustomers {
 			if (!driverless && tripPoint > 0) {
 				tripPoint = tripPoint + changeInMilesPerHour; 
 			}
+			boolean rideShareTrip = trip.isRideShare(); 
 			bw.write(
 					profile.getDriverId() 
 					+ ",2"
 					+ "," + dateFormat.format(currentTime) 
 					+ "," + tripPoint 
 					+ "," + driverless
+					+ "," + rideShareTrip
 					+ "\n");
 //			bw.write("{ driverId: " + profile.getDriverId() 
 //				+ ", vehicleId: " + 1
@@ -190,11 +199,12 @@ public class GenerateTripsForCustomers {
 //				+ " }, \n");
 			TripData tripData = new TripData(); 
 			tripData.setDriverId(profile.getDriverId());
-			tripData.setVehicleId(1);
+			tripData.setVehicleId(2);
 			tripData.setSpeed(tripPoint);
 			tripData.setTimeStamp(currentTime);
 			tripData.setDriverless(driverless);
-			tripDataRepository.save(tripData);
+			tripData.setRideShare(rideShareTrip);
+//			tripDataRepository.save(tripData);
 		}
 
 	}

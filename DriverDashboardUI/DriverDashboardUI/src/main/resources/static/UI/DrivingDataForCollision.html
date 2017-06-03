@@ -15,6 +15,11 @@
             	font: 18px sans-serif;font-weight: bold;
             }
 </style>
+<div><label>Collision ID</label><input id="collisionId" type="text"></input></div>
+<div><label>Policy Number</label><input id="policyNumber" type="text"></input></div>
+<div><label>Vehicle ID</label><input id="vehicleId" type="text"></input></div>
+<div><label>Driver ID</label><input id="driverId" type="text"></input></div>
+<div><label>Timestamp</label><input id="timestamp" type="text"></input></div>
 <svg id="userChart" width="960" height="600"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="../../assets/js/jquery-3.2.1.min.js"></script>
@@ -87,16 +92,20 @@ d3.json(url, function(error, collision) {
 	var policy = collision.policy; 
 	var vehicleId = collision.vehicleId; 
 	
-	var durationInMinutes = 2; 
+	var durationInMinutes = 4; 
 	var startTimestamp = new Date(collisionTimestamp - (durationInMinutes * MS_PER_MINUTE));
 	var startTimestampString = encodeURIComponent(timeFormat(startTimestamp));
-	/*
-	{
-		  "driverId": "1",
-		  "startTime": "06/02/2020 08:30",
-		  "stopTime": "06/02/2020 08:45"
-		}
-	*/
+	
+	jQuery("#collisionId").val(getCollisionId());
+	jQuery("#driverId").val(driverId);
+	
+	d3.json("/TripData/drivers/" + driverId, function(error, driver) {
+		  if (error) throw error;
+		jQuery("#policyNumber").val(driver.policy);
+	});
+	jQuery("#timestamp").val(timeFormat(collisionTimestamp));
+	jQuery("#vehicleId").val(driverId);
+	
 	url = '/TripData/tripDatas/search/by-driverIdAndTimestampBetween?driverId=' + driverId + "&startTime="  + startTimestampString + "&stopTime=" + encodeURIComponent(timeFormat(collisionTimestamp));
 	console.log("Calling the following URL: " + url);
 	d3.json(url, function(error, data) {

@@ -15,6 +15,7 @@ public class TripProfile {
 	private int numberOfStops;
 	private int numberOfUberPassengers;
 	private List<int[]> selfDriveStartAndStops;
+	boolean isRideShare; 
 
 	public TripProfile(DriverProfile driverProfile) {
 		super();
@@ -108,5 +109,13 @@ public class TripProfile {
 			selfDriveStartAndStops = new ArrayList<int[]>(2);
 		}
 		return selfDriveStartAndStops;
+	}
+
+	public boolean isRideShare() {
+		return isRideShare;
+	}
+
+	public void setRideShare(boolean isRideShare) {
+		this.isRideShare = isRideShare;
 	}
 }

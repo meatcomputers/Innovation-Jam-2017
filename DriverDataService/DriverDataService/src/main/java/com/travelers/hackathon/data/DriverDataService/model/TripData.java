@@ -29,6 +29,8 @@ public class TripData {
 	private Float speed;
 	
 	private Boolean driverless;
+	
+	private Boolean rideShare; 
 
 	public Long getTripID() {
 		return tripID;
@@ -76,6 +78,14 @@ public class TripData {
 
 	public void setDriverless(Boolean driverless) {
 		this.driverless = driverless;
+	}
+
+	public Boolean getRideShare() {
+		return rideShare;
+	}
+
+	public void setRideShare(Boolean rideShare) {
+		this.rideShare = rideShare;
 	}
 	
 }

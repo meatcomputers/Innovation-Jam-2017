@@ -3,21 +3,20 @@
 #speedometerContainer {
 	height: 300px;
 	width: 340px;
-	background-color: grey; 
 }
 
 .gauge .domain {
 	stroke-width: 2px;
-	stroke: #fff;
+	stroke: #000;
 }
 
 .gauge .tick line {
-	stroke: #fff;
+	stroke: #000;
 	stroke-width: 2px;
 }
 
 .gauge line {
-	stroke: #fff;
+	stroke: #000;
 }
 
 .gauge .arc, .gauge .cursor {
@@ -25,7 +24,7 @@
 }
 
 .gauge .major {
-	fill: #fff;
+	fill: #000;
 	font-size: 20px;
 	font-family: 'Play', verdana, sans-serif;
 	font-weight: normal;

@@ -8,7 +8,7 @@ jQuery(document).ready(function($){
 				var driver = data._embedded.drivers[0];
 		    	$( '#insuredPOlicyNumber' ).html( driver.policy );
 		    	$( '#driverName' ).html( "" + driver.firstName + " " + driver.lastName);
-		    	$( '#vehicleMake' ).html( driver.policy );
+		    	getVehicleByVehicleId();
 		    	
 		    	var safetyUrl = driver._links.safety.href;
 		    	console.log("safetyUrl " + safetyUrl);
@@ -17,17 +17,20 @@ jQuery(document).ready(function($){
 		    	var driverUrl = driver._links.self.href; 
 		    	console.log("driver Url: " + driverUrl); 	
 		    	var driverId = driverUrl.substring(driverUrl.indexOf('drivers/') + 8);
-		    	
-		    	$( '#driverId' ).val( driverId );
+		    	$( '#driverId' ).val(driverId);
 		    	getVehicleByVehicleId(driverId); 
+		    	getCollision(driverId);
 			}
 		});
 	};
 	
 	getVehicleByVehicleId = function(vehicleId) {
-		$.get("/TripData/vehicles/" + vehicleId, function( data ) {
+		var vehiclesUrl = "/TripData/vehicles/1";// + vehicleId;
+		console.log("What did we call to get a vehicle? " + vehiclesUrl);
+		$.get(vehiclesUrl, function( data ) {
 			var vehicle = data;
-			$( '#vehicleMake' ).val( vehicle.make + " "  + vehicle.model);
+			var makeModel = vehicle.make + " "  + vehicle.model;
+			$( '#vehicleMake' ).html( makeModel);
 		});
 	};
 	
@@ -38,55 +41,17 @@ jQuery(document).ready(function($){
 			console.log("Safety URL: " + safetyUrl);
 			var safetyId = safetyUrl.substring(safetyUrl.indexOf('safeties/') + 9);
 			$( '#safetyLevel' ).val( safetyId);
-			//Speedometer work
-			d3.select("#speedometer").html("");
-			
+		});
+	};
 
-	        var svg = d3.select("#speedometer")
-	                .append("svg:svg")
-	                .attr("width", 400)
-	                .attr("height", 400);
-
-
-	        var gauge = iopctrl.arcslider()
-	                .radius(120)
-	                .events(false)
-	                .indicator(iopctrl.defaultGaugeIndicator);
-	        gauge.axis().orient("in")
-	                .normalize(true)
-	                .ticks(12)
-	                .tickSubdivide(3)
-	                .tickSize(10, 8, 10)
-	                .tickPadding(5)
-	                .scale(d3.scale.linear()
-	                        .domain([0, 10])
-	                        .range([-3*Math.PI/4, 3*Math.PI/4]));
-
-	        var segDisplay = iopctrl.segdisplay()
-	                .width(80)
-	                .digitCount(6)
-	                .negative(false)
-	                .decimals(0);
-
-	        svg.append("g")
-	                .attr("class", "gauge")
-	                .call(gauge);
-	                
-	        gauge.value(safetyId);
-	    	
-	        //Driverless work 
-	        var safetyPercent = safety.driverlessPct; 
-	        var automatic = 100 * safetyPercent; 
-	        var manual = 100 - automatic; 
-	    	createPieChart("#driverlessPieChart", "manual", "automatic", manual, automatic); 
-	    	var rideShare = manual / 2;
-	    	var privateDriving = 100 - rideShare; 
-	    	createPieChart("#rideShareChart", "private", "ride share", privateDriving, rideShare); 
-	    	var maxPremium = 600; 
-	    	var discount = maxPremium * safetyPercent;
-	    	discount = discount - (discount * (rideShare / 100));
-	    	var premium = maxPremium - discount; 
-	    	createPieChart("#premiumChart", "premium $" + premium, "credit $" + discount, premium, discount); 
+	var timeFormat = function(date) {
+		return "" + date;
+	}
+	
+	getCollision = function(collisionId) {
+		$.get("/TripData/collisions/" + collisionId, function( data ) {
+			var collision = data;
+			$('#CollisionReportedOn').html("Collision Detected on: " + timeFormat(collision.timestamp));
 		});
 	};
 	
@@ -101,6 +66,12 @@ var searchForPolicy = function() {
 	getDriverByPOlicy(policyNumber);
 	return false; 
 };
+
+var goToCollision = function() {
+	var driverId = $( '#driverId' ).val(); 
+	console.log("We are opening a new page: " + driverId);
+	window.location.href = "DrivingDataForCollision.html?collisionId=" + driverId; 
+}
 
 var createPieChart = function(
 		targetDivName, 

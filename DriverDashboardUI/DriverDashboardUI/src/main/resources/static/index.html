@@ -50,6 +50,7 @@ var area = d3.area()
     .y0(height)
     .y1(function(d) { return y(d.speed); });
 
+var url = 'http://localhost:9090/TripData//tripDatas/search/by-driverIdLastHour?driverId=' + 1; //getDriverId(); 
 d3.json('data.json', function(error, data) { // Replace the REST URL with data.json to test with the local file
   if (error) throw error;
   data._embedded.tripDatas.forEach(function(d) {

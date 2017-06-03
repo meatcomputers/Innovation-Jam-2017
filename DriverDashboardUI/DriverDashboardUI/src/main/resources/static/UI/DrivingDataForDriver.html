@@ -17,7 +17,23 @@
 </style>
 <svg id="userChart" width="960" height="600"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../../assets/js/jquery-3.2.1.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/jquery-3.2.1.min.js"><\/script>')</script>
 <script>
+
+
+var getDriverId = function() {
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        console.log("Driver " + hash[1]);
+        return hash[1];
+    }
+    console.log("Could not find driver.  " + hash[1]);
+    return 1;
+};
 
 var svg = d3.select("svg"),
     margin = {top: 55, right: 20, bottom: 200, left: 50},
@@ -42,9 +58,17 @@ var area = d3.area()
     .y0(height)
     .y1(function(d) { return y(d.speed); });
 
-d3.json('http://localhost:9090/TripData/tripDatas', function(error, data) {
+var url = 'http://localhost:9090/TripData//tripDatas/search/by-driverIdLastHour?driverId=' + getDriverId(); 
+d3.json(url, function(error, data) {
   if (error) throw error;
-  data._embedded.tripDatas.forEach(function(d) {
+  
+  
+  var newData = data._embedded.tripDatas.reverse();
+  if (data._embedded.tripDatas.length > 20) {
+	  newData = newData.slice(0, 20);
+  }
+  console.log("concatenating the arrray and reversing. ");
+  newData.forEach(function(d) {
     d.timeStamp = parseTime(d.timeStamp);
     d.speed = +d.speed;
     d.x = d.timeStamp;

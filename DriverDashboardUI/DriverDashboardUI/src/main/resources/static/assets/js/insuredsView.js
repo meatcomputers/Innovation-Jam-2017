@@ -17,6 +17,8 @@ jQuery(document).ready(function($){
 		    	var driverUrl = driver._links.self.href; 
 		    	console.log("driver Url: " + driverUrl); 	
 		    	var driverId = driverUrl.substring(driverUrl.indexOf('drivers/') + 8);
+		    	
+		    	$( '#driverId' ).val( driverId );
 		    	getVehicleByVehicleId(driverId); 
 			}
 		});
@@ -149,6 +151,13 @@ var createPieChart = function(
             .text(function(d, i) { return data[i].label; });        //get the label from our original data array
         
 };
+
+/*Go to the page. */
+var goToLastHourOfDrivingData = function() {
+	var driverId = $( '#driverId' ).val(); 
+	console.log("We are opening a new page: " + driverId);
+	window.location.href = "DrivingDataForDriver.html?driverId=" + driverId; 
+}
 
 var displayVelocityChartForUser = function(userId) {
 

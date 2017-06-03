@@ -80,6 +80,7 @@
           <div class="row">
           	<label>Safety Level Score</label><input id="safetyLevel" type="text"></input>
           </div>
+          <input type="hidden" name="driverId" id="driverId" />
 
 
           <section class="row text-center placeholders">
@@ -109,7 +110,7 @@
 
 
           <h2>Last hour of driving</h2>
-          <svg id="userChart" width="960" height="600"></svg>
+          <button onclick="goToLastHourOfDrivingData(); return false; " >Last Hour of Driving</button> 
         </main>
       </div>
          </div>

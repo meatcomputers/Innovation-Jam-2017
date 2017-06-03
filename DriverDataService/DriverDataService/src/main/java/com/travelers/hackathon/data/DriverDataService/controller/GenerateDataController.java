@@ -18,7 +18,7 @@ public class GenerateDataController {
 			MediaType.APPLICATION_JSON_VALUE, "application/hal+json" })
 	public String generateDataForUser() {
 		try {
-//			generateTripsController.generateDataForDriverOne();
+//			generateTripsController.generateDataForDriverTwo();
 			return "success"; 
 		} catch (Exception e) {
 			e.printStackTrace();

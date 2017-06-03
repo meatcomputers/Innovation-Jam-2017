@@ -24,7 +24,7 @@ public class GenerateTripsForCustomers {
 	private static final int SAMPLE_TIME_SECONDS = 15;
 
 	public static void main(String[] args) throws Exception {
-		new GenerateTripsForCustomers().generateDataForDriverOne();
+		new GenerateTripsForCustomers().generateDataForDriverTwo();
 	}
 
 	public void generateDataForDriverOne() throws Exception {
@@ -87,6 +87,74 @@ public class GenerateTripsForCustomers {
 		bw.write("]}\n");
 
 	}
+	
+
+	public void generateDataForDriverTwo() throws Exception {
+		DriverProfile driverProfile = new DriverProfile();
+		driverProfile.setDriverId(2);
+		driverProfile.setAcceleration(2.71f);
+		driverProfile.setDeceleration(-2.71f);
+		driverProfile.setPassengersPerDay(2);
+
+		Calendar tripDate = Calendar.getInstance();
+		tripDate.set(2020, Calendar.JUNE, 02, 10, 15, 0);
+		TripProfile weekdayCommute = new TripProfile(driverProfile);
+		weekdayCommute.setStartTime(tripDate.getTime());
+		weekdayCommute.setNumberOfStops(12);
+		weekdayCommute.setNumberOfUberPassengers(0);
+		weekdayCommute.setMaxSpeedMilesPerHour(60);
+		weekdayCommute.setAccelerationMetersPerSecondSecond(2.71f);
+		weekdayCommute.setDecelerationMetersPerSecondSecond(-2.71f);
+		weekdayCommute.setSampleTimeSeconds(SAMPLE_TIME_SECONDS);
+		weekdayCommute.setTotalSeconds(33 * 60);
+
+		TripProfile saturdayDrive = new TripProfile(driverProfile);
+		saturdayDrive.setStartTime(tripDate.getTime());
+		saturdayDrive.setNumberOfStops(3);
+		saturdayDrive.setNumberOfUberPassengers(0);
+		saturdayDrive.setMaxSpeedMilesPerHour(45);
+		saturdayDrive.setAccelerationMetersPerSecondSecond(1.7f);
+		saturdayDrive.setDecelerationMetersPerSecondSecond(-1.8f);
+		saturdayDrive.setSampleTimeSeconds(SAMPLE_TIME_SECONDS);
+		saturdayDrive.setTotalSeconds(5 * 60);
+
+		FileWriter fw = new FileWriter("Data/DriverData_02.csv");
+//		FileWriter fw = new FileWriter("Data/DriverData_01.json");
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write("driverID, timestamp, velocity, driverless\n");
+//		bw.write("data: {[\n");
+		
+		for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < 5; i++) {
+				tripDate.set(Calendar.HOUR, 8);
+				tripDate.set(Calendar.MINUTE, 30);
+				weekdayCommute.setStartTime(tripDate.getTime());
+				generateTripData(driverProfile, weekdayCommute, bw, .5f);
+
+				tripDate.add(Calendar.HOUR, 2);
+				weekdayCommute.setStartTime(tripDate.getTime());
+				generateTripData(driverProfile, weekdayCommute, bw, .5f);
+
+				tripDate.add(Calendar.HOUR, 3);
+				weekdayCommute.setStartTime(tripDate.getTime());
+				generateTripData(driverProfile, weekdayCommute, bw, .5f);
+				
+				tripDate.add(Calendar.DATE, 1);
+			}
+
+			tripDate.set(Calendar.HOUR, 11);
+			tripDate.set(Calendar.MINUTE, 30);
+			saturdayDrive.setStartTime(tripDate.getTime());
+			generateTripData(driverProfile, saturdayDrive, bw, .5f);
+			tripDate.add(Calendar.DATE, 1);
+			generateTripData(driverProfile, saturdayDrive, bw, .5f);
+			tripDate.add(Calendar.DATE, 1);
+
+		}
+
+		bw.write("]}\n");
+
+	}
 
 	public static final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
 
@@ -101,11 +169,15 @@ public class GenerateTripsForCustomers {
 		Date currentTime = trip.getStartTime();
 		for (int i = 0; i < tripPoints.length; i++) {
 			float tripPoint = tripPoints[i];
+			int changeInMilesPerHour = (int) ((Math.random() - .5d) * 10d); 
 			currentTime = new Date(currentTime.getTime() + 1000 * trip.getSampleTimeSeconds());
 			boolean driverless = ((startDriverless <= i) && (i <= stopDriverless)); 
+			if (!driverless && tripPoint > 0) {
+				tripPoint = tripPoint + changeInMilesPerHour; 
+			}
 			bw.write(
 					profile.getDriverId() 
-					+ ",1"
+					+ ",2"
 					+ "," + dateFormat.format(currentTime) 
 					+ "," + tripPoint 
 					+ "," + driverless
@@ -120,7 +192,7 @@ public class GenerateTripsForCustomers {
 			tripData.setDriverId(profile.getDriverId());
 			tripData.setVehicleId(1);
 			tripData.setSpeed(tripPoint);
-//			tripData.setTimeStamp(currentTime);
+			tripData.setTimeStamp(currentTime);
 			tripData.setDriverless(driverless);
 			tripDataRepository.save(tripData);
 		}

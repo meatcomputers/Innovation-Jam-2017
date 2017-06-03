@@ -3,7 +3,7 @@ zuul:
   routes:
     tripData:
       path: /TripData/**
-      url: http://172.20.10.8:9081/
+      url: http://10.220.58.242:9081/
     
 
 logging:

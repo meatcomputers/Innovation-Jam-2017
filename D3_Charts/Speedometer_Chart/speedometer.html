@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1265.21">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Insured Safety Rating&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Play:700,400' type='text/css'&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script type="text/javascript" src="http://iop.io/js/vendor/d3.v3.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script type="text/javascript" src="http://iop.io/js/vendor/polymer/PointerEvents/pointerevents.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script type="text/javascript" src="http://iop.io/js/vendor/polymer/PointerGestures/pointergestures.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script type="text/javascript" src="http://iop.io/js/iopctrl.js"&gt;&lt;/script&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font: 16px arial;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #515151;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.unselectable {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>-moz-user-select: -moz-none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>-khtml-user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>-webkit-user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>-ms-user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* css formats for the gauge */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.gauge .domain {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stroke-width: 2px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stroke: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.gauge .tick line {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stroke: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stroke-width: 2px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.gauge line {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stroke: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.gauge .arc, .gauge .cursor {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.gauge .major {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>fill: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Play', verdana, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: normal;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.gauge .indicator {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stroke: #EE3311;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>fill: #000;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stroke-width: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* css formats for the segment display */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.segdisplay .on {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>fill: #00FFFF;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.segdisplay .off {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>fill: #00FFFF;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.15;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="speedometer"&gt;&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var svg = d3.select("#speedometer")</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.append("svg:svg")</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.attr("width", 400)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.attr("height", 400);</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>var gauge = iopctrl.arcslider()</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.radius(120)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.events(false)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.indicator(iopctrl.defaultGaugeIndicator);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gauge.axis().orient("in")</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.normalize(true)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.ticks(12)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.tickSubdivide(3)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.tickSize(10, 8, 10)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.tickPadding(5)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.scale(d3.scale.linear()</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>.domain([0, 10])</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>.range([-3*Math.PI/4, 3*Math.PI/4]));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>var segDisplay = iopctrl.segdisplay()</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.width(80)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.digitCount(6)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.negative(false)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.decimals(0);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>svg.append("g")</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.attr("class", "gauge")</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.call(gauge);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>gauge.value(8);</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+</body>
+</html>

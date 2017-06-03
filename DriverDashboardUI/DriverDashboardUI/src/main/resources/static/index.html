@@ -51,9 +51,10 @@ var area = d3.area()
     .y1(function(d) { return y(d.speed); });
 
 var url = 'http://localhost:9090/TripData//tripDatas/search/by-driverIdLastHour?driverId=' + 1; //getDriverId(); 
-d3.json('data.json', function(error, data) { // Replace the REST URL with data.json to test with the local file
+d3.json(url, function(error, data) { // Replace the REST URL with data.json to test with the local file
   if (error) throw error;
-  data._embedded.tripDatas.forEach(function(d) {
+  var newData = data._embedded.tripDatas.slice(0, 20);
+  newData.forEach(function(d) {
     d.timeStamp = parseTime(d.timeStamp);
     d.speed = +d.speed;
     d.x = d.timeStamp;

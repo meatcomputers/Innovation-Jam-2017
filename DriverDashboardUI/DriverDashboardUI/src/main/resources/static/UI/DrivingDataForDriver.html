@@ -15,10 +15,8 @@
             	font: 18px sans-serif;font-weight: bold;
             }
 </style>
-<svg id="userChart" width="960" height="600"></svg>
+<svg width="960" height="600"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="../../assets/js/jquery-3.2.1.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/jquery-3.2.1.min.js"><\/script>')</script>
 <script>
 
 
@@ -35,6 +33,15 @@ var getDriverId = function() {
     return 1;
 };
 
+var w = 125;
+var transitions = new Array();
+var lastMode = -1;
+var currIdx = 0;
+var color_hash = {  0 : ["rideshare automated", "#58D68D"],
+  1 : ["personal automated", "green"],
+  2 : ["rideshare manual", "#85C1E9"],
+  3 : ["personal manual", "steelblue"]
+} 
 var svg = d3.select("svg"),
     margin = {top: 55, right: 20, bottom: 200, left: 50},
     width = +svg.attr("width") - margin.left - margin.right,
@@ -50,8 +57,15 @@ var y = d3.scaleLinear()
     .rangeRound([height, 0]);
 
 var line = d3.line()
-    .x(function(d) { return x(d.timeStamp); })
-    .y(function(d) { return y(d.speed); });
+    .x(function(d) { 
+    	return x(d.timeStamp); 
+    })
+    .y(function(d) { 
+    	if (isNaN(d.speed) ) {
+    		return y(0.0);
+    	}
+    	return y(d.speed); 
+    });
     
 var area = d3.area()
     .x(function(d) { return x(d.timeStamp); })
@@ -59,23 +73,49 @@ var area = d3.area()
     .y1(function(d) { return y(d.speed); });
 
 var url = 'http://localhost:9090/TripData//tripDatas/search/by-driverIdLastHour?driverId=' + getDriverId(); 
-d3.json(url, function(error, data) {
+d3.json(url, function(error, data) { // Replace the REST URL with data.json to test with the local file
   if (error) throw error;
-  
-  
-  var newData = data._embedded.tripDatas.reverse();
-  if (data._embedded.tripDatas.length > 20) {
-	  newData = newData.slice(0, 20);
-  }
-  console.log("concatenating the arrray and reversing. ");
+  var newData = data._embedded.tripDatas.slice(0, 20);
   newData.forEach(function(d) {
     d.timeStamp = parseTime(d.timeStamp);
     d.speed = +d.speed;
     d.x = d.timeStamp;
     d.y = d.speed;
+
+    if(lastMode != 0 && d.driverless == true && d.rideshare == true) {
+      lastMode = 0;
+      var json = '{"index":'+currIdx+',"mode":'+lastMode+'}'; // is JSON
+      var o = JSON.parse(json); // is a javascript object
+      json = JSON.stringify(o); // is JSON again
+      transitions.push(o);
+    } else if(lastMode != 1 && d.driverless == true && d.rideshare == false) {
+      lastMode = 1;
+      var json = '{"index":'+currIdx+',"mode":'+lastMode+'}'; // is JSON
+      var o = JSON.parse(json); // is a javascript object
+      json = JSON.stringify(o); // is JSON again
+      transitions.push(o);
+    } else if(lastMode != 2 && d.driverless == false && d.rideshare == true) {
+
+      lastMode = 2;
+      
+      var json = '{"index":'+currIdx+',"mode":'+lastMode+'}'; // is JSON
+      var o = JSON.parse(json); // is a javascript object
+      json = JSON.stringify(o); // is JSON again
+      transitions.push(o);
+    } else if(lastMode != 3 && d.driverless == false && d.rideshare == false) {
+
+      lastMode = 3;
+      
+      var json = '{"index":'+currIdx+',"mode":'+lastMode+'}'; // is JSON
+      var o = JSON.parse(json); // is a javascript object
+      json = JSON.stringify(o); // is JSON again
+      transitions.push(o);
+    }
+    currIdx++;
     return d;
   });
 
+  console.log("Went through data");
   x.domain(d3.extent(data._embedded.tripDatas, function(d) { return d.timeStamp; }));
   y.domain(d3.extent(data._embedded.tripDatas, function(d) { return d.speed; }));
 
@@ -100,6 +140,17 @@ d3.json(url, function(error, data) {
       .attr("text-anchor", "end")
       .text("Speed (mph)");
 
+transitions.forEach(function(d) {
+  g.append("path")
+      .datum(data._embedded.tripDatas.slice(d.index))
+      .attr("fill", color_hash[String(d.mode)][1])
+      .attr("stroke-width", 0)
+      .attr("d", area);
+  
+});
+console.log("append g 4");
+
+/*
   g.append("path")
       .datum(data._embedded.tripDatas.slice(0))
       .attr("fill", "#58D68D")
@@ -129,6 +180,7 @@ d3.json(url, function(error, data) {
       .attr("fill", "green")
       .attr("stroke-width", 0)
       .attr("d", area);
+      */
 
   g.append("path")
       .datum(data._embedded.tripDatas)
@@ -145,15 +197,7 @@ d3.json(url, function(error, data) {
 	   .attr("x", (svg.attr("width") - margin.left - margin.right)/2)
 	   .attr("y", 50)
 	   .text("Driving Data");
-	   
- var w = 125;
- 
- var color_hash = {  0 : ["rideshare automated", "#58D68D"],
-    1 : ["personal automated", "green"],
-    2 : ["rideshare manual", "#85C1E9"],
-    3 : ["personal manual", "steelblue"]
-  }       
-  
+
 	// add legend   
 	var legend = svg.append("g")
 	  .attr("class", "legend")
@@ -184,6 +228,8 @@ d3.json(url, function(error, data) {
           .text(color_hash[String(i)][0]);
 
       });
+    
+    console.log("append g 6");
 
 });
 
